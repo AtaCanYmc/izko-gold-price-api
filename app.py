@@ -8,8 +8,11 @@ with open("config.json", "r") as f:
     config = json.load(f)
 app = Flask(__name__)
 
+@app.route("/izko")
+def main_resource():
+    return jsonify(config["api"]), 200
 
-@app.route("/bundle", methods=["GET"])
+@app.route("/izko/bundle", methods=["GET"])
 def bundle() -> tuple[Response, int] | Response:
     content, status = scrape()
     return jsonify(content), status

@@ -6,10 +6,10 @@
     "22Ayar": "yirmiikiLabel",
     "18Ayar": "onsekizLabel",
     "14Ayar": "ondortLabel",
-    "GramAltın": "gramLabel",
+    "GramAltin": "gramLabel",
     "Cumhuriyet": "ataLabel",
-    "Çeyrek": "yeniceyrekLabel",
-    "Yarım": "yeniyarimLabel",
+    "Ceyrek": "yeniceyrekLabel",
+    "Yarim": "yeniyarimLabel",
     "Ziynet": "yenitamLabel",
     "PaketliHas": "ons",
     "Dolar": "dolar",
@@ -18,7 +18,11 @@
   "api": {
     "port": 5000,
     "host": "127.0.0.1",
-    "externalAccessHost": "0.0.0.0",
-    "debug": true
+    "debug": true,
+    "rootMessage": "Welcome to izko API",
+    "endpointList": {
+      "base": "/izko",
+      "bundle": "/izko/bundle"
+    }
   }
 }
