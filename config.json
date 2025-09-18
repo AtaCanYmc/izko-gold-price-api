@@ -1,6 +1,7 @@
 {
   "url": {
-    "izko": "https://www.izko.org.tr/Home/GuncelKur"
+    "izko": "https://www.izko.org.tr/Home/GuncelKur",
+    "timeout": 10000
   },
   "label": {
     "22Ayar": "yirmiikiLabel",

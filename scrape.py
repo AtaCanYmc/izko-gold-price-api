@@ -4,17 +4,19 @@ from playwright.sync_api import sync_playwright
 with open("config.json", "r") as f:
     config = json.load(f)
 
+
 def scrape() -> tuple[dict, int]:
     price_result = {}
-    url = config.get("url").get("izko")
-    labels = config.get("label")
+    url = config["url"]["izko"]
+    labels = config["label"]
     if not url: return {"error": "URL param is required"}, 500
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page.goto(url)
-        page.wait_for_selector(f'#{labels.get("Cumhuriyet", "ataLabel")}', timeout=15000)
+        page.wait_for_selector(selector=f'#{labels.get("Cumhuriyet", "ataLabel")}',
+                               timeout=config["url"]["timeout"])
 
         for name, id_ in labels.items():
             element = page.query_selector(f"#{id_}")
@@ -24,6 +26,7 @@ def scrape() -> tuple[dict, int]:
         "url": url,
         "priceList": price_result
     }, 200
+
 
 def to_float(value: str) -> float | str:
     try:
