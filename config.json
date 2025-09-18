@@ -13,7 +13,8 @@
     "Ziynet": "yenitamLabel",
     "PaketliHas": "ons",
     "Dolar": "dolar",
-    "Euro": "euro"
+    "Euro": "euro",
+    "Tarih": "clock"
   },
   "api": {
     "port": 5000,
