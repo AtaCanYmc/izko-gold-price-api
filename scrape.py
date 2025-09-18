@@ -22,7 +22,7 @@ def scrape() -> tuple[dict, int]:
 
     return {
         "url": url,
-        "golds": price_result
+        "priceList": price_result
     }, 200
 
 def to_float(value: str) -> float | str:
