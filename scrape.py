@@ -8,7 +8,7 @@ def scrape() -> tuple[dict, int]:
     price_result = {}
     url = config.get("url").get("izko")
     labels = config.get("label")
-    if not url: return {"error": "URL param is required"}, 400
+    if not url: return {"error": "URL param is required"}, 500
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
