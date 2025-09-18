@@ -1,0 +1,18 @@
+{
+  "url": {
+    "izko": "https://www.izko.org.tr/Home/GuncelKur"
+  },
+  "label": {
+    "22Ayar": "yirmiikiLabel",
+    "18Ayar": "onsekizLabel",
+    "14Ayar": "ondortLabel",
+    "GramAltın": "gramLabel",
+    "Cumhuriyet": "ataLabel",
+    "Çeyrek": "yeniceyrekLabel",
+    "Yarım": "yeniyarimLabel",
+    "Ziynet": "yenitamLabel",
+    "PaketliHas": "ons",
+    "Dolar": "dolar",
+    "Euro": "euro"
+  }
+}
