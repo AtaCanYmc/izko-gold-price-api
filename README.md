@@ -68,14 +68,11 @@ Run the service in an isolated container with Chromium and system libraries pre-
 # 1. Clone the repository
 git clone https://github.com/AtaCanYmc/izko-gold-price-api.git && cd izko-gold-price-api
 
-# 2. Bind Flask to all container interfaces in config.json
-python3 -c 'import json; p="src/izko_gold_price_api/config.json"; c=json.load(open(p)); c["api"]["host"]="0.0.0.0"; json.dump(c, open(p,"w"), indent=2)'
-
-# 3. Build and start the container
+# 2. Build and start the container
 make docker-build
 make docker-run
 
-# 4. Verify service metadata endpoint
+# 3. Verify service metadata endpoint
 curl -f http://localhost:5000/izko
 ```
 
@@ -119,7 +116,7 @@ izko-gold-price-api config
 | `--config` | `-c` | Path | Bundled `config.json` | Override path to `config.json`. |
 | `serve --host` | None | String | `127.0.0.1` | Override Flask bind host. |
 | `serve --port` | None | Integer | `5000` | Override Flask listener port. |
-| `serve --debug` / `--no-debug` | None | Boolean | `true` | Enable or disable Flask debug mode. |
+| `serve --debug` / `--no-debug` | None | Boolean | `false` | Enable or disable Flask debug mode. |
 | `scrape --field` | `-f` | String | None | Output a single field from `priceList`. |
 | `scrape --pretty` | None | Flag | `false` | Format JSON output with 2-space indentation. |
 | `scrape --url` | None | String | `url.izko` | Override target URL for a single run. |
@@ -174,7 +171,7 @@ Response (`200 OK`):
 
 ```json
 {
-  "debug": true,
+  "debug": false,
   "endpointList": {
     "base": "/izko",
     "bundle": "/izko/bundle"
@@ -227,7 +224,7 @@ Default runtime settings live in [`src/izko_gold_price_api/config.json`](src/izk
 | `url.timeout` | Integer | `10000` | Yes | Selector wait timeout in milliseconds. |
 | `api.host` | String | `127.0.0.1` | Yes | Flask bind address. Set to `0.0.0.0` inside Docker containers. |
 | `api.port` | Integer | `5000` | Yes | HTTP listener port. |
-| `api.debug` | Boolean | `true` | Yes | Enables Flask debug reloader. Set to `false` in production. |
+| `api.debug` | Boolean | `false` | Yes | Enables Flask debug reloader. Keep `false` in production. |
 | `api.rootMessage` | String | `Welcome to izko API` | No | Informational message returned by `/izko`. |
 
 ### DOM Selector Mapping (`label`)
@@ -274,6 +271,7 @@ make publish
 │   └── workflows/
 │       ├── ci.yml
 │       └── release-please.yml
+├── .dockerignore
 ├── .editorconfig
 ├── .gitattributes
 ├── .gitignore

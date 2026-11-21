@@ -23,6 +23,7 @@
 *.pdf binary
 
 # Release archive exclusions
+.dockerignore export-ignore
 .github export-ignore
 .gitignore export-ignore
 .gitattributes export-ignore

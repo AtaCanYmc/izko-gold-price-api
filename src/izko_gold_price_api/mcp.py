@@ -4,7 +4,7 @@ import json
 import sys
 from typing import Any, TextIO
 
-from .scrape import load_config, scrape
+from .scrape import MAX_TIMEOUT_MS, MIN_TIMEOUT_MS, load_config, scrape
 
 __version__ = "0.1.0"
 DEFAULT_PROTOCOL_VERSION = "2024-11-05"
@@ -28,6 +28,8 @@ TOOLS: list[dict[str, Any]] = [
                 },
                 "timeout": {
                     "type": "integer",
+                    "minimum": MIN_TIMEOUT_MS,
+                    "maximum": MAX_TIMEOUT_MS,
                     "description": "Optional DOM selector wait timeout in milliseconds (default: 10000).",
                 },
             },
@@ -75,7 +77,6 @@ def handle_mcp_request(request: dict[str, Any], cfg: dict[str, Any] | None = Non
     req_id = request.get("id")
     params = request.get("params") or {}
 
-    # Notifications carry no id and expect no response
     if "id" not in request:
         return None
 
@@ -123,11 +124,11 @@ def handle_mcp_request(request: dict[str, Any], cfg: dict[str, Any] | None = Non
         if tool_name == "get_izko_prices":
             try:
                 payload, status = scrape(timeout=arguments.get("timeout"), cfg=active_cfg)
-            except Exception as exc:
+            except Exception:
                 return _jsonrpc_result(
                     req_id,
                     {
-                        "content": [{"type": "text", "text": f"Scrape failed: {exc}"}],
+                        "content": [{"type": "text", "text": "Scrape failed"}],
                         "isError": True,
                     },
                 )
@@ -201,7 +202,9 @@ def handle_mcp_request(request: dict[str, Any], cfg: dict[str, Any] | None = Non
                 },
             )
         if uri == "izko://prices":
-            payload, _ = scrape(cfg=active_cfg)
+            payload, status = scrape(cfg=active_cfg)
+            if status != 200:
+                return _jsonrpc_error(req_id, -32603, payload.get("error", "Upstream scrape failed"))
             return _jsonrpc_result(
                 req_id,
                 {

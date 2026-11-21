@@ -68,14 +68,11 @@ Servisi Chromium ve sistem bağımlılıkları önceden kurulmuş yalıtılmış
 # 1. Clone the repository
 git clone https://github.com/AtaCanYmc/izko-gold-price-api.git && cd izko-gold-price-api
 
-# 2. Bind Flask to all container interfaces in config.json
-python3 -c 'import json; p="src/izko_gold_price_api/config.json"; c=json.load(open(p)); c["api"]["host"]="0.0.0.0"; json.dump(c, open(p,"w"), indent=2)'
-
-# 3. Build and start the container
+# 2. Build and start the container
 make docker-build
 make docker-run
 
-# 4. Verify service metadata endpoint
+# 3. Verify service metadata endpoint
 curl -f http://localhost:5000/izko
 ```
 
@@ -119,7 +116,7 @@ izko-gold-price-api config
 | `--config` | `-c` | Yol | Paket içi `config.json` | Özel `config.json` dosya yolunu belirler. |
 | `serve --host` | Yok | String | `127.0.0.1` | Flask dinleme adresini ezer. |
 | `serve --port` | Yok | Integer | `5000` | Flask dinleme portunu ezer. |
-| `serve --debug` / `--no-debug` | Yok | Boolean | `true` | Flask hata ayıklama modunu açar veya kapatır. |
+| `serve --debug` / `--no-debug` | Yok | Boolean | `false` | Flask hata ayıklama modunu açar veya kapatır. |
 | `scrape --field` | `-f` | String | Yok | `priceList` içinden tek bir alanı yazdırır. |
 | `scrape --pretty` | Yok | Bayrak | `false` | JSON çıktısını 2 boşluk girintiyle biçimlendirir. |
 | `scrape --url` | Yok | String | `url.izko` | Tek çalıştırma için hedef URL değerini ezer. |
@@ -174,7 +171,7 @@ Yanıt (`200 OK`):
 
 ```json
 {
-  "debug": true,
+  "debug": false,
   "endpointList": {
     "base": "/izko",
     "bundle": "/izko/bundle"
@@ -227,7 +224,7 @@ Varsayılan çalışma zamanı ayarları [`src/izko_gold_price_api/config.json`]
 | `url.timeout` | Integer | `10000` | Evet | Milisaniye cinsinden DOM seçici bekleme zaman aşımı. |
 | `api.host` | String | `127.0.0.1` | Evet | Flask dinleme adresi. Docker içinde `0.0.0.0` yapılmalıdır. |
 | `api.port` | Integer | `5000` | Evet | HTTP dinleme portu. |
-| `api.debug` | Boolean | `true` | Evet | Flask hata ayıklama yeniden yükleyicisi. Üretimde `false` yapılmalıdır. |
+| `api.debug` | Boolean | `false` | Evet | Flask hata ayıklama yeniden yükleyicisi. Üretimde `false` tutulmalıdır. |
 | `api.rootMessage` | String | `Welcome to izko API` | Hayır | `/izko` uç noktasında döndürülen bilgilendirme metni. |
 
 ### DOM Seçici Eşlemesi (`label`)
@@ -274,6 +271,7 @@ make publish
 │   └── workflows/
 │       ├── ci.yml
 │       └── release-please.yml
+├── .dockerignore
 ├── .editorconfig
 ├── .gitattributes
 ├── .gitignore

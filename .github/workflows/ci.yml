@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -41,8 +44,15 @@ jobs:
 
           cfg = load_config()
           assert 'url' in cfg and 'label' in cfg and 'api' in cfg
+          assert cfg['api']['debug'] is False
           assert to_float('23.450,75') == 23450.75
           assert to_float('14:30:00') == '14:30:00'
+
+          from izko_gold_price_api.scrape import scrape
+          err_payload, err_status = scrape(url='file:///etc/passwd')
+          assert err_status == 400
+          timeout_payload, timeout_status = scrape(timeout=999999)
+          assert timeout_status == 400
 
           parser = build_parser()
           args = parser.parse_args(['serve', '--host', '0.0.0.0', '--port', '8080', '--no-debug'])
