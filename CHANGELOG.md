@@ -2,6 +2,14 @@
 
 All notable changes to `izko-gold-price-api` are documented in this file.
 
+## [0.2.1](https://github.com/AtaCanYmc/izko-gold-price-api/compare/v0.2.0...v0.2.1) (2026-11-21)
+
+
+### Documentation
+
+* add Homebrew tap badge and install command ([39da062](https://github.com/AtaCanYmc/izko-gold-price-api/commit/39da062c0c8e83393eb2f64a3635fb23ba57f1fe))
+* add square SVG logo and PyPI release badge ([cce6148](https://github.com/AtaCanYmc/izko-gold-price-api/commit/cce61482cc0aaf0fefa68112a0b90698bb53f1f3))
+
 ## [0.1.1](https://github.com/AtaCanYmc/izko-gold-price-api/compare/v0.1.0...v0.1.1) (2026-11-21)
 
 
