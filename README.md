@@ -10,6 +10,7 @@
 
 [![CI](https://github.com/AtaCanYmc/izko-gold-price-api/actions/workflows/ci.yml/badge.svg)](https://github.com/AtaCanYmc/izko-gold-price-api/actions/workflows/ci.yml)
 [![PyPI version](https://img.shields.io/pypi/v/izko-gold-price-api.svg)](https://pypi.org/project/izko-gold-price-api/)
+[![Homebrew Tap](https://img.shields.io/badge/Homebrew-AtaCanYmc%2Ftap-FBB040?logo=homebrew&logoColor=white)](https://github.com/AtaCanYmc/homebrew-tap)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -58,7 +59,12 @@ sequenceDiagram
 Install the package and download the Playwright Chromium binary:
 
 ```bash
+# Install via PyPI
 pip install izko-gold-price-api
+playwright install chromium
+
+# Or install via Homebrew (macOS / Linux)
+brew install AtaCanYmc/tap/izko-gold-price-api
 playwright install chromium
 
 # Start the Flask REST API server
