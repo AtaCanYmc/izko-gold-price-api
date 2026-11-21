@@ -286,6 +286,12 @@ make publish
 ├── README.tr.md
 ├── ROADMAP.md
 ├── SECURITY.md
+├── docs/
+│   ├── README.md
+│   ├── api-reference.md
+│   ├── architecture.md
+│   ├── cli-and-mcp.md
+│   └── deployment.md
 ├── pyproject.toml
 ├── release-please-config.json
 ├── requirements.txt
@@ -314,6 +320,7 @@ python -c "from izko_gold_price_api import to_float; assert to_float('23.450,75'
 
 ## Contributing and Security
 
+- Extended technical guides live in [docs/README.md](docs/README.md).
 - Contribution workflow and commit conventions are documented in [CONTRIBUTING.md](CONTRIBUTING.md).
 - Planned technical milestones are tracked in [ROADMAP.md](ROADMAP.md).
 - Vulnerability disclosure steps are specified in [SECURITY.md](SECURITY.md).

@@ -286,6 +286,12 @@ make publish
 ├── README.tr.md
 ├── ROADMAP.md
 ├── SECURITY.md
+├── docs/
+│   ├── README.md
+│   ├── api-reference.md
+│   ├── architecture.md
+│   ├── cli-and-mcp.md
+│   └── deployment.md
 ├── pyproject.toml
 ├── release-please-config.json
 ├── requirements.txt
@@ -314,6 +320,7 @@ python -c "from izko_gold_price_api import to_float; assert to_float('23.450,75'
 
 ## Katkı ve Güvenlik
 
+- Detaylı teknik rehberler [docs/README.md](docs/README.md) dizininde yer alır.
 - Katkı süreci ve commit kuralları [CONTRIBUTING.md](CONTRIBUTING.md) dosyasında açıklanmıştır.
 - Planlanan teknik kilometre taşları [ROADMAP.md](ROADMAP.md) dosyasında izlenir.
 - Güvenlik açığı bildirim adımları [SECURITY.md](SECURITY.md) dosyasında belirtilmiştir.
