@@ -12,6 +12,9 @@ trim_trailing_whitespace = true
 [*.py]
 indent_size = 4
 
+[Makefile]
+indent_style = tab
+
 [*.{sh,bash,zsh}]
 indent_size = 2
 end_of_line = lf

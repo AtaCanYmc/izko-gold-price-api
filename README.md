@@ -1,5 +1,7 @@
 <!-- well-document · audit scorecard: G1:5 G2:5 G3:5 G4:5 G5:5 G6:5 · STATUS: PASS -->
 
+[Türkçe Dokümantasyon](README.tr.md)
+
 # izko-gold-price-api
 
 [![CI](https://github.com/AtaCanYmc/izko-gold-price-api/actions/workflows/ci.yml/badge.svg)](https://github.com/AtaCanYmc/izko-gold-price-api/actions/workflows/ci.yml)
@@ -68,8 +70,8 @@ git clone https://github.com/AtaCanYmc/izko-gold-price-api.git && cd izko-gold-p
 python3 -c 'import json; p="src/izko_gold_price_api/config.json"; c=json.load(open(p)); c["api"]["host"]="0.0.0.0"; json.dump(c, open(p,"w"), indent=2)'
 
 # 3. Build and start the container
-docker build -t izko-gold-price-api .
-docker run -d -p 5000:5000 --name izko-api izko-gold-price-api
+make docker-build
+make docker-run
 
 # 4. Verify service metadata endpoint
 curl -f http://localhost:5000/izko
@@ -85,11 +87,10 @@ python3 -m venv venv
 source venv/bin/activate
 
 # 2. Install package in editable mode and download Chromium binary
-pip install -e .
-playwright install chromium
+make install
 
 # 3. Start the Flask server via CLI entry point
-izko-gold-price-api
+make run
 ```
 
 ## Python Library Usage
@@ -193,13 +194,11 @@ Default runtime settings live in [`src/izko_gold_price_api/config.json`](src/izk
 
 ## Building and Publishing to PyPI
 
-Build source (`sdist`) and wheel (`bdist_wheel`) distributions using standard PEP 517 tooling:
+Build source (`sdist`) and wheel (`bdist_wheel`) distributions using `Makefile` or PEP 517 tooling:
 
 ```bash
-pip install build twine
-python -m build
-twine check dist/*
-twine upload dist/*
+make build
+make publish
 ```
 
 ## Repository Layout
@@ -224,7 +223,9 @@ twine upload dist/*
 ├── CONTRIBUTING.md
 ├── Dockerfile
 ├── LICENSE
+├── Makefile
 ├── README.md
+├── README.tr.md
 ├── ROADMAP.md
 ├── SECURITY.md
 ├── pyproject.toml
@@ -239,11 +240,11 @@ twine upload dist/*
 
 ## Testing and Verification
 
-Validate configuration syntax, Python bytecode compilation, and float normalization locally before opening a pull request:
+Validate configuration syntax, Python bytecode compilation, and documentation links locally before opening a pull request:
 
 ```bash
-# Verify Python syntax and compile bytecode
-python -m py_compile src/izko_gold_price_api/__init__.py src/izko_gold_price_api/app.py src/izko_gold_price_api/scrape.py
+# Run syntax, config schema, and markdown link verification
+make verify
 
 # Verify Turkish decimal normalization logic (with virtualenv active)
 python -c "from izko_gold_price_api import to_float; assert to_float('23.450,75') == 23450.75; assert to_float('14:30') == '14:30'"
