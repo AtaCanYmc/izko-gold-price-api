@@ -18,7 +18,7 @@ jobs:
       tag_name: ${{ steps.release.outputs.tag_name }}
       version: ${{ steps.release.outputs.version }}
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v5
         id: release
         with:
           config-file: release-please-config.json
@@ -33,12 +33,12 @@ jobs:
       contents: write
     steps:
       - name: Checkout released tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ needs.release-please.outputs.tag_name }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.13"
 
@@ -54,7 +54,7 @@ jobs:
         run: gh release upload "${{ needs.release-please.outputs.tag_name }}" dist/* --clobber
 
       - name: Upload dist artifact for PyPI publishing job
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pypi-dist
           path: dist/
@@ -75,7 +75,7 @@ jobs:
       contents: read
     steps:
       - name: Download built distribution artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: pypi-dist
           path: dist/
