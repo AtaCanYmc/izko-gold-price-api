@@ -5,6 +5,7 @@ import json
 import sys
 from typing import Sequence
 
+from .mcp import run_mcp_server
 from .scrape import DEFAULT_CONFIG_PATH, load_config, scrape
 
 __version__ = "0.1.0"
@@ -13,7 +14,7 @@ __version__ = "0.1.0"
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="izko-gold-price-api",
-        description="Izmir Jewelers Chamber (IZKO) gold and currency scraper CLI and Flask REST API.",
+        description="Izmir Jewelers Chamber (IZKO) gold and currency scraper SDK, CLI, Flask REST API, and MCP server.",
     )
     parser.add_argument(
         "-V",
@@ -63,6 +64,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Print active configuration JSON and exit.",
     )
 
+    subparsers.add_parser(
+        "mcp",
+        help="Start the Model Context Protocol (MCP) JSON-RPC 2.0 server over stdio.",
+    )
+
     return parser
 
 
@@ -76,6 +82,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     if command == "config":
         print(json.dumps(cfg, indent=2, ensure_ascii=False))
         return 0
+
+    if command == "mcp":
+        return run_mcp_server(config_path=args.config)
 
     if command == "scrape":
         payload, status = scrape(url=args.url, timeout=args.timeout, cfg=cfg)

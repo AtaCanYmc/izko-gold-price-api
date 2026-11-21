@@ -34,7 +34,8 @@
           "jsonpath": "$.project.version"
         },
         "src/izko_gold_price_api/__init__.py",
-        "src/izko_gold_price_api/cli.py"
+        "src/izko_gold_price_api/cli.py",
+        "src/izko_gold_price_api/mcp.py"
       ]
     }
   }

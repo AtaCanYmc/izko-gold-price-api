@@ -17,6 +17,7 @@
 - [Hızlı Başlangıç: Docker](#hızlı-başlangıç-docker)
 - [Yerel Geliştirme Kurulumu](#yerel-geliştirme-kurulumu)
 - [Komut Satırı Arayüzü](#komut-satırı-arayüzü)
+- [Model Context Protocol Sunucusu](#model-context-protocol-sunucusu)
 - [Python Kütüphanesi Olarak Kullanım](#python-kütüphanesi-olarak-kullanım)
 - [API Uç Noktaları](#api-uç-noktaları)
 - [Yapılandırma](#yapılandırma)
@@ -124,6 +125,28 @@ izko-gold-price-api config
 | `scrape --url` | Yok | String | `url.izko` | Tek çalıştırma için hedef URL değerini ezer. |
 | `scrape --timeout` | Yok | Integer | `10000` | Seçici bekleme süresini milisaniye cinsinden ezer. |
 | `config` | Yok | Alt Komut | Yok | Etkin yapılandırma JSON içeriğini yazdırır ve çıkar. |
+| `mcp` | Yok | Alt Komut | Yok | `stdio` üzerinden MCP JSON-RPC 2.0 sunucusunu başlatır. |
+
+## Model Context Protocol Sunucusu
+
+Paket [`mcp.py`](src/izko_gold_price_api/mcp.py) içinde ek bağımlılık gerektirmeyen bir Model Context Protocol (`MCP`) JSON-RPC 2.0 `stdio` sunucusu içerir. `izko-gold-price-mcp` veya `izko-gold-price-api mcp` komutuyla başlatılır.
+
+```json
+{
+  "mcpServers": {
+    "izko-gold-price": {
+      "command": "izko-gold-price-mcp"
+    }
+  }
+}
+```
+
+| MCP Yeteneği | Ad / URI | Açıklama |
+| :--- | :--- | :--- |
+| Araç (`Tool`) | `get_izko_prices` | Canlı İZKO altın ve döviz kurlarını kazır. İsteğe bağlı `field` ve `timeout` parametrelerini alır. |
+| Araç (`Tool`) | `get_izko_config` | Etkin URL, seçici zaman aşımı, DOM etiket kimlikleri ve API yapılandırmasını döndürür. |
+| Kaynak (`Resource`) | `izko://config` | Etkin yapılandırma JSON belgesi. |
+| Kaynak (`Resource`) | `izko://prices` | Canlı kazınmış kur paketi JSON belgesi. |
 
 ## Python Kütüphanesi Olarak Kullanım
 
@@ -273,6 +296,7 @@ make publish
         ├── app.py
         ├── cli.py
         ├── config.json
+        ├── mcp.py
         └── scrape.py
 ```
 

@@ -17,6 +17,7 @@ Flask REST API and Python package that scrapes live gold and currency rates from
 - [Quick Start: Docker](#quick-start-docker)
 - [Manual Local Setup](#manual-local-setup)
 - [Command-Line Interface](#command-line-interface)
+- [Model Context Protocol Server](#model-context-protocol-server)
 - [Python Library Usage](#python-library-usage)
 - [API Endpoints](#api-endpoints)
 - [Configuration](#configuration)
@@ -124,6 +125,28 @@ izko-gold-price-api config
 | `scrape --url` | None | String | `url.izko` | Override target URL for a single run. |
 | `scrape --timeout` | None | Integer | `10000` | Override selector wait timeout in milliseconds. |
 | `config` | None | Subcommand | None | Print active configuration JSON and exit. |
+| `mcp` | None | Subcommand | None | Start the MCP JSON-RPC 2.0 server over `stdio`. |
+
+## Model Context Protocol Server
+
+The package includes a zero-dependency Model Context Protocol (`MCP`) JSON-RPC 2.0 `stdio` server in [`mcp.py`](src/izko_gold_price_api/mcp.py). Launch it via `izko-gold-price-mcp` or `izko-gold-price-api mcp`.
+
+```json
+{
+  "mcpServers": {
+    "izko-gold-price": {
+      "command": "izko-gold-price-mcp"
+    }
+  }
+}
+```
+
+| MCP Capability | Name / URI | Description |
+| :--- | :--- | :--- |
+| Tool | `get_izko_prices` | Scrapes live IZKO gold and currency rates. Accepts optional `field` and `timeout` arguments. |
+| Tool | `get_izko_config` | Returns active URL, selector timeout, DOM label IDs, and API configuration. |
+| Resource | `izko://config` | Active configuration JSON document. |
+| Resource | `izko://prices` | Live scraped price bundle JSON document. |
 
 ## Python Library Usage
 
@@ -273,6 +296,7 @@ make publish
         ├── app.py
         ├── cli.py
         ├── config.json
+        ├── mcp.py
         └── scrape.py
 ```
 
