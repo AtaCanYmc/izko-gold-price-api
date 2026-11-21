@@ -215,11 +215,14 @@ make publish
 │   │   └── pull_request_template.md
 │   ├── dependabot.yml
 │   └── workflows/
-│       └── ci.yml
+│       ├── ci.yml
+│       └── release-please.yml
 ├── .editorconfig
 ├── .gitattributes
 ├── .gitignore
 ├── .markdownlint.json
+├── .release-please-manifest.json
+├── CHANGELOG.md
 ├── CONTRIBUTING.md
 ├── Dockerfile
 ├── LICENSE
@@ -229,6 +232,7 @@ make publish
 ├── ROADMAP.md
 ├── SECURITY.md
 ├── pyproject.toml
+├── release-please-config.json
 ├── requirements.txt
 └── src/
     └── izko_gold_price_api/
