@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "izko-gold-price-api"
-version = "0.1.1"
+version = "0.2.0"
 description = "Flask REST API and Playwright scraper for live gold and currency rates from Izmir Jewelers Chamber (IZKO)."
 readme = "README.md"
 license = "MIT"

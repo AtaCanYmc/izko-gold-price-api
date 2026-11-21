@@ -6,8 +6,7 @@ try:
     from .app import app
 except ModuleNotFoundError:
     app = None  # type: ignore[assignment]
-
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 __all__ = [
     "app",
     "build_parser",
