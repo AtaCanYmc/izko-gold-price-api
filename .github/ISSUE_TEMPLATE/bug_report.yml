@@ -1,0 +1,50 @@
+name: Bug Report
+description: Report a reproducible defect in the scraper or Flask API
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Verify the issue has not already been reported before opening a new ticket.
+        For security vulnerabilities, refer to [SECURITY.md](../../SECURITY.md).
+  - type: textarea
+    id: summary
+    attributes:
+      label: Bug Description
+      description: Clear description of the defect.
+      placeholder: Describe what happened.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Exact commands or HTTP requests that trigger the bug.
+      placeholder: |
+        1. Start server with 'python app.py'
+        2. Run 'curl -i http://127.0.0.1:5000/izko/bundle'
+        3. Observe error...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should have happened?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or Terminal Output
+      description: Paste relevant Python tracebacks or response payloads.
+      render: shell
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, Playwright version, or Docker image tag.
+      placeholder: Python 3.13, macOS 15 / Debian slim
+    validations:
+      required: true

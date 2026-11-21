@@ -1,0 +1,36 @@
+name: Feature Request
+description: Propose a new endpoint, selector, or architectural improvement
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check existing issues and [ROADMAP.md](../../ROADMAP.md) to verify this proposal is not already tracked.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Describe the technical limitation this feature resolves.
+      placeholder: Currently, scraping launches a new browser per request...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+      description: Detail the requested behavior, route, or config.json changes.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Other approaches or workarounds evaluated.
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Contributor Checklist
+      options:
+        - label: I searched existing issues and ROADMAP.md before submitting this request.
+          required: true
