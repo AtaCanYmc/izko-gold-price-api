@@ -6,15 +6,18 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Flask REST API that scrapes live gold and currency rates from the Izmir Jewelers Chamber (`izko.org.tr`) using headless Chromium via Playwright.
+Flask REST API and Python package that scrapes live gold and currency rates from the Izmir Jewelers Chamber (`izko.org.tr`) using headless Chromium via Playwright.
 
 ## Table of Contents
 
 - [System Architecture](#system-architecture)
+- [Installation from PyPI](#installation-from-pypi)
 - [Quick Start: Docker](#quick-start-docker)
 - [Manual Local Setup](#manual-local-setup)
+- [Python Library Usage](#python-library-usage)
 - [API Endpoints](#api-endpoints)
 - [Configuration](#configuration)
+- [Building and Publishing to PyPI](#building-and-publishing-to-pypi)
 - [Repository Layout](#repository-layout)
 - [Testing and Verification](#testing-and-verification)
 - [Contributing and Security](#contributing-and-security)
@@ -22,13 +25,13 @@ Flask REST API that scrapes live gold and currency rates from the Izmir Jewelers
 
 ## System Architecture
 
-The service exposes two HTTP GET routes through Flask. When `/izko/bundle` is requested, `scrape.py` launches a headless Chromium instance through Playwright, waits for the price table DOM selector `#ataLabel` to populate on `https://www.izko.org.tr/Home/GuncelKur`, extracts each configured element ID, and normalizes Turkish formatted decimals into IEEE 754 floating-point numbers.
+The package exposes both a Python API (`izko_gold_price_api`) and a Flask server entry point (`izko-gold-price-api`). When `/izko/bundle` or `scrape()` is called, [`scrape.py`](src/izko_gold_price_api/scrape.py) launches a headless Chromium instance through Playwright, waits for the price table DOM selector `#ataLabel` to populate on `https://www.izko.org.tr/Home/GuncelKur`, extracts each configured element ID, and normalizes Turkish formatted decimals into IEEE 754 floating-point numbers.
 
 ```mermaid
 sequenceDiagram
-    participant Client as HTTP Client
-    participant Flask as Flask Server: app.py
-    participant Scraper as Playwright Scraper: scrape.py
+    participant Client as HTTP Client / Python Caller
+    participant Flask as Flask Server: izko_gold_price_api.app
+    participant Scraper as Playwright Scraper: izko_gold_price_api.scrape
     participant IZKO as izko.org.tr/Home/GuncelKur
 
     Client->>Flask: GET /izko/bundle
@@ -41,6 +44,18 @@ sequenceDiagram
     Flask-->>Client: application/json
 ```
 
+## Installation from PyPI
+
+Install the package and download the Playwright Chromium binary:
+
+```bash
+pip install izko-gold-price-api
+playwright install chromium
+
+# Start the Flask REST API server
+izko-gold-price-api
+```
+
 ## Quick Start: Docker
 
 Run the service in an isolated container with Chromium and system libraries pre-installed.
@@ -50,7 +65,7 @@ Run the service in an isolated container with Chromium and system libraries pre-
 git clone https://github.com/AtaCanYmc/izko-gold-price-api.git && cd izko-gold-price-api
 
 # 2. Bind Flask to all container interfaces in config.json
-python3 -c 'import json; p="config.json"; c=json.load(open(p)); c["api"]["host"]="0.0.0.0"; json.dump(c, open(p,"w"), indent=2)'
+python3 -c 'import json; p="src/izko_gold_price_api/config.json"; c=json.load(open(p)); c["api"]["host"]="0.0.0.0"; json.dump(c, open(p,"w"), indent=2)'
 
 # 3. Build and start the container
 docker build -t izko-gold-price-api .
@@ -62,26 +77,38 @@ curl -f http://localhost:5000/izko
 
 ## Manual Local Setup
 
-Run the service directly on macOS, Linux, or Windows with Python 3.10 or newer.
+Install the package in editable mode on macOS, Linux, or Windows with Python 3.10 or newer.
 
 ```bash
 # 1. Create and activate a virtual environment
 python3 -m venv venv
 source venv/bin/activate
 
-# 2. Install Python dependencies and Chromium binary
-pip install -r requirements.txt
+# 2. Install package in editable mode and download Chromium binary
+pip install -e .
 playwright install chromium
 
-# 3. Start the Flask development server
-python app.py
+# 3. Start the Flask server via CLI entry point
+izko-gold-price-api
+```
+
+## Python Library Usage
+
+Import `scrape`, `to_float`, or the Flask `app` instance directly in Python code:
+
+```python
+from izko_gold_price_api import scrape, to_float
+
+payload, status_code = scrape()
+if status_code == 200:
+    print(payload["priceList"]["GramAltin"])
 ```
 
 ## API Endpoints
 
 ### `GET /izko`
 
-Returns the active server configuration and registered route paths from [`config.json`](config.json).
+Returns the active server configuration and registered route paths from [`config.json`](src/izko_gold_price_api/config.json).
 
 ```bash
 curl -s http://127.0.0.1:5000/izko
@@ -134,7 +161,7 @@ Response (`200 OK`):
 
 ## Configuration
 
-All runtime settings live in [`config.json`](config.json).
+Default runtime settings live in [`src/izko_gold_price_api/config.json`](src/izko_gold_price_api/config.json). Set the `IZKO_CONFIG_PATH` environment variable to point to an external JSON file when overriding defaults without modifying the installed package.
 
 ### Server and Scraper Parameters
 
@@ -164,6 +191,17 @@ All runtime settings live in [`config.json`](config.json).
 | `Euro` | `#euro` | EUR/TRY exchange rate |
 | `Tarih` | `#clock` | Source update timestamp |
 
+## Building and Publishing to PyPI
+
+Build source (`sdist`) and wheel (`bdist_wheel`) distributions using standard PEP 517 tooling:
+
+```bash
+pip install build twine
+python -m build
+twine check dist/*
+twine upload dist/*
+```
+
 ## Repository Layout
 
 ```text
@@ -189,10 +227,14 @@ All runtime settings live in [`config.json`](config.json).
 ├── README.md
 ├── ROADMAP.md
 ├── SECURITY.md
-├── app.py
-├── config.json
+├── pyproject.toml
 ├── requirements.txt
-└── scrape.py
+└── src/
+    └── izko_gold_price_api/
+        ├── __init__.py
+        ├── app.py
+        ├── config.json
+        └── scrape.py
 ```
 
 ## Testing and Verification
@@ -201,10 +243,10 @@ Validate configuration syntax, Python bytecode compilation, and float normalizat
 
 ```bash
 # Verify Python syntax and compile bytecode
-python -m py_compile app.py scrape.py
+python -m py_compile src/izko_gold_price_api/__init__.py src/izko_gold_price_api/app.py src/izko_gold_price_api/scrape.py
 
 # Verify Turkish decimal normalization logic (with virtualenv active)
-python -c "from scrape import to_float; assert to_float('23.450,75') == 23450.75; assert to_float('14:30') == '14:30'"
+python -c "from izko_gold_price_api import to_float; assert to_float('23.450,75') == 23450.75; assert to_float('14:30') == '14:30'"
 ```
 
 ## Contributing and Security

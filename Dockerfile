@@ -12,18 +12,16 @@ RUN apt-get update && apt-get install -y \
     libgbm1 libpango-1.0-0 libcairo2 libasound2 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy project files and install package
+COPY pyproject.toml README.md LICENSE ./
+COPY src/ ./src/
+RUN pip install --no-cache-dir .
 
 # Install Playwright browsers
 RUN playwright install --with-deps chromium
 
-# Copy project files
-COPY . .
-
 # Expose Flask port
 EXPOSE 5000
 
-# Start app
-CMD ["python", "app.py"]
+# Start app via package CLI entry point
+CMD ["izko-gold-price-api"]

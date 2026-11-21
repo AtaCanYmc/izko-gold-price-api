@@ -23,23 +23,23 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
 
-      - name: Install dependencies
+      - name: Install package and build tools
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip build
+          pip install -e .
+
+      - name: Build sdist and wheel packages
+        run: python -m build
 
       - name: Verify Python bytecode compilation
-        run: python -m py_compile app.py scrape.py
+        run: python -m py_compile src/izko_gold_price_api/__init__.py src/izko_gold_price_api/app.py src/izko_gold_price_api/scrape.py
 
-      - name: Verify config.json schema and parser logic
+      - name: Verify config.json schema and package imports
         run: |
           python -c "
-          import json
-          from app import app
-          from scrape import to_float
+          from izko_gold_price_api import app, load_config, to_float
 
-          with open('config.json', encoding='utf-8') as f:
-              cfg = json.load(f)
+          cfg = load_config()
           assert 'url' in cfg and 'label' in cfg and 'api' in cfg
           assert to_float('23.450,75') == 23450.75
           assert to_float('14:30:00') == '14:30:00'
@@ -53,7 +53,7 @@ jobs:
 
       - name: Verify essential governance files
         run: |
-          for f in README.md LICENSE CONTRIBUTING.md SECURITY.md ROADMAP.md; do
+          for f in README.md LICENSE CONTRIBUTING.md SECURITY.md ROADMAP.md pyproject.toml; do
             test -f "$f" || (echo "Missing $f" && exit 1)
           done
 

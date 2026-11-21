@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "izko-gold-price-api"
+version = "0.1.0"
+description = "Flask REST API and Playwright scraper for live gold and currency rates from Izmir Jewelers Chamber (IZKO)."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+  { name = "Ata Can", email = "atacanymc@gmail.com" }
+]
+keywords = ["izko", "gold", "currency", "scraper", "playwright", "flask", "api"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Web Environment",
+  "Framework :: Flask",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+dependencies = [
+  "Flask>=3.1.2",
+  "playwright>=1.40.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/AtaCanYmc/izko-gold-price-api"
+Repository = "https://github.com/AtaCanYmc/izko-gold-price-api"
+Issues = "https://github.com/AtaCanYmc/izko-gold-price-api/issues"
+
+[project.scripts]
+izko-gold-price-api = "izko_gold_price_api.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+izko_gold_price_api = ["config.json"]
