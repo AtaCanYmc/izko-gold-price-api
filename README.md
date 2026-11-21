@@ -249,7 +249,9 @@ Default runtime settings live in [`src/izko_gold_price_api/config.json`](src/izk
 
 ## Building and Publishing to PyPI
 
-Build source (`sdist`) and wheel (`bdist_wheel`) distributions using `Makefile` or PEP 517 tooling:
+Every merged [Release Please](.github/workflows/release-please.yml) pull request automatically builds `sdist` and `bdist_wheel` distributions and publishes them to PyPI using OpenID Connect (`OIDC`) Trusted Publishing (`pypa/gh-action-pypi-publish@release/v1`) under the `pypi` GitHub Actions environment.
+
+To build and verify distributions locally:
 
 ```bash
 make build

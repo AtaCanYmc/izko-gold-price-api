@@ -249,7 +249,9 @@ Varsayılan çalışma zamanı ayarları [`src/izko_gold_price_api/config.json`]
 
 ## PyPI Paketi Derleme ve Yayınlama
 
-Kaynak (`sdist`) ve tekerlek (`bdist_wheel`) dağıtımlarını `Makefile` veya PEP 517 araçlarıyla oluşturun:
+Birleştirilen her [Release Please](.github/workflows/release-please.yml) sürüm PR'ı, `sdist` ve `bdist_wheel` paketlerini otomatik derler ve `pypi` GitHub Actions ortamı üzerinden OpenID Connect (`OIDC`) Trusted Publisher (`pypa/gh-action-pypi-publish@release/v1`) ile PyPI üzerine yayınlar.
+
+Paketleri yerelde derlemek ve doğrulamak için:
 
 ```bash
 make build

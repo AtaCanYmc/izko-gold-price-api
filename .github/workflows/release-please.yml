@@ -25,7 +25,7 @@ jobs:
           manifest-file: .release-please-manifest.json
 
   build-release-artifacts:
-    name: Build and Attach Python Wheel and sdist
+    name: Build Python Wheel and sdist
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created == 'true' }}
     runs-on: ubuntu-latest
@@ -52,3 +52,33 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload "${{ needs.release-please.outputs.tag_name }}" dist/* --clobber
+
+      - name: Upload dist artifact for PyPI publishing job
+        uses: actions/upload-artifact@v4
+        with:
+          name: pypi-dist
+          path: dist/
+          if-no-files-found: error
+
+  publish-pypi:
+    name: Publish to PyPI via Trusted Publisher (OIDC)
+    needs:
+      - release-please
+      - build-release-artifacts
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/izko-gold-price-api
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Download built distribution artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: pypi-dist
+          path: dist/
+
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
