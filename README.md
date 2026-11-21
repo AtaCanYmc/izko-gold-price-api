@@ -2,9 +2,14 @@
 
 [Türkçe Dokümantasyon](README.tr.md)
 
+<p align="center">
+  <img src="docs/logo.svg" alt="izko-gold-price-api logo" width="140" height="140">
+</p>
+
 # izko-gold-price-api
 
 [![CI](https://github.com/AtaCanYmc/izko-gold-price-api/actions/workflows/ci.yml/badge.svg)](https://github.com/AtaCanYmc/izko-gold-price-api/actions/workflows/ci.yml)
+[![PyPI version](https://img.shields.io/pypi/v/izko-gold-price-api.svg)](https://pypi.org/project/izko-gold-price-api/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -292,7 +297,8 @@ make publish
 │   ├── api-reference.md
 │   ├── architecture.md
 │   ├── cli-and-mcp.md
-│   └── deployment.md
+│   ├── deployment.md
+│   └── logo.svg
 ├── pyproject.toml
 ├── release-please-config.json
 ├── requirements.txt
