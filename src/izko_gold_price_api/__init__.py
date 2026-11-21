@@ -2,6 +2,11 @@ from .cli import build_parser, main
 from .mcp import handle_mcp_request, run_mcp_server
 from .scrape import load_config, scrape, to_float
 
+try:
+    from .app import app
+except ModuleNotFoundError:
+    app = None  # type: ignore[assignment]
+
 __version__ = "0.1.0"
 __all__ = [
     "app",
@@ -14,11 +19,3 @@ __all__ = [
     "to_float",
     "__version__",
 ]
-
-
-def __getattr__(name: str):
-    if name == "app":
-        from .app import app
-
-        return app
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
