@@ -8,7 +8,7 @@ from typing import Sequence
 from .mcp import run_mcp_server
 from .scrape import DEFAULT_CONFIG_PATH, load_config, scrape
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 
 def build_parser() -> argparse.ArgumentParser:

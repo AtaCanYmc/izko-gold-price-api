@@ -6,7 +6,7 @@ from typing import Any, TextIO
 
 from .scrape import MAX_TIMEOUT_MS, MIN_TIMEOUT_MS, load_config, scrape
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 DEFAULT_PROTOCOL_VERSION = "2024-11-05"
 
 TOOLS: list[dict[str, Any]] = [
