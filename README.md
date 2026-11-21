@@ -218,14 +218,15 @@ Default runtime settings live in [`src/izko_gold_price_api/config.json`](src/izk
 
 ### Server and Scraper Parameters
 
-| Key Path | Type | Default | Required | Description |
-| :--- | :--- | :--- | :---: | :--- |
-| `url.izko` | String | `https://www.izko.org.tr/Home/GuncelKur` | Yes | Target URL scraped by Playwright. |
-| `url.timeout` | Integer | `10000` | Yes | Selector wait timeout in milliseconds. |
-| `api.host` | String | `127.0.0.1` | Yes | Flask bind address. Set to `0.0.0.0` inside Docker containers. |
-| `api.port` | Integer | `5000` | Yes | HTTP listener port. |
-| `api.debug` | Boolean | `false` | Yes | Enables Flask debug reloader. Keep `false` in production. |
-| `api.rootMessage` | String | `Welcome to izko API` | No | Informational message returned by `/izko`. |
+| Key Path | Env Override | Type | Default | Required | Description |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| `url.izko` | None | String | `https://www.izko.org.tr/Home/GuncelKur` | Yes | Target URL scraped by Playwright. |
+| `url.timeout` | `IZKO_TIMEOUT` | Integer | `10000` | Yes | Selector wait timeout in milliseconds. |
+| `url.cache_ttl` | `IZKO_CACHE_TTL` | Integer | `30` | No | In-memory response cache TTL in seconds (`0` disables cache). |
+| `api.host` | `IZKO_HOST` | String | `127.0.0.1` | Yes | Flask bind address. Set to `0.0.0.0` inside Docker containers. |
+| `api.port` | `IZKO_PORT` | Integer | `5000` | Yes | HTTP listener port. |
+| `api.debug` | `IZKO_DEBUG` | Boolean | `false` | Yes | Enables Flask debug reloader. Keep `false` in production. |
+| `api.rootMessage` | None | String | `Welcome to izko API` | No | Informational message returned by `/izko`. |
 
 ### DOM Selector Mapping (`label`)
 

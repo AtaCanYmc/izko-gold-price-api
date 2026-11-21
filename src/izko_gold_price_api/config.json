@@ -1,7 +1,8 @@
 {
   "url": {
     "izko": "https://www.izko.org.tr/Home/GuncelKur",
-    "timeout": 10000
+    "timeout": 10000,
+    "cache_ttl": 30
   },
   "label": {
     "22Ayar": "yirmiikiLabel",

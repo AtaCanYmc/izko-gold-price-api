@@ -57,6 +57,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     scrape_parser.add_argument("--url", default=None, help="Override target IZKO URL.")
     scrape_parser.add_argument("--timeout", type=int, default=None, help="Selector timeout in milliseconds.")
+    scrape_parser.add_argument("--cache-ttl", type=int, default=None, help="Cache TTL in seconds (0 disables cache).")
+    scrape_parser.add_argument("--no-cache", action="store_true", help="Bypass in-memory response cache.")
     scrape_parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON output with 2-space indent.")
 
     subparsers.add_parser(
@@ -87,7 +89,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         return run_mcp_server(config_path=args.config)
 
     if command == "scrape":
-        payload, status = scrape(url=args.url, timeout=args.timeout, cfg=cfg)
+        payload, status = scrape(
+            url=args.url,
+            timeout=args.timeout,
+            cfg=cfg,
+            cache_ttl=args.cache_ttl,
+            use_cache=not args.no_cache,
+        )
         if status != 200:
             print(json.dumps(payload, ensure_ascii=False), file=sys.stderr)
             return 1

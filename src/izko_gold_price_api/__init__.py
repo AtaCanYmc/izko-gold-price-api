@@ -1,6 +1,6 @@
 from .cli import build_parser, main
 from .mcp import handle_mcp_request, run_mcp_server
-from .scrape import load_config, scrape, to_float
+from .scrape import clear_cache, close_browser, load_config, scrape, to_float
 
 try:
     from .app import app
@@ -11,6 +11,8 @@ __version__ = "0.1.0"
 __all__ = [
     "app",
     "build_parser",
+    "clear_cache",
+    "close_browser",
     "handle_mcp_request",
     "load_config",
     "main",

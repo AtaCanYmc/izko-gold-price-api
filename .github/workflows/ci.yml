@@ -48,11 +48,27 @@ jobs:
           assert to_float('23.450,75') == 23450.75
           assert to_float('14:30:00') == '14:30:00'
 
-          from izko_gold_price_api.scrape import scrape
+          from izko_gold_price_api.scrape import clear_cache, close_browser, scrape
+          import os, sys, types
+
           err_payload, err_status = scrape(url='file:///etc/passwd')
-          assert err_status == 400
+          assert err_status == 400 and err_payload['code'] == 'INVALID_URL'
           timeout_payload, timeout_status = scrape(timeout=999999)
-          assert timeout_status == 400
+          assert timeout_status == 400 and timeout_payload['code'] == 'INVALID_TIMEOUT'
+
+          os.environ['IZKO_HOST'] = '0.0.0.0'
+          os.environ['IZKO_PORT'] = '9090'
+          os.environ['IZKO_DEBUG'] = 'true'
+          os.environ['IZKO_TIMEOUT'] = '15000'
+          os.environ['IZKO_CACHE_TTL'] = '45'
+          env_cfg = load_config()
+          assert env_cfg['api']['host'] == '0.0.0.0'
+          assert env_cfg['api']['port'] == 9090
+          assert env_cfg['api']['debug'] is True
+          assert env_cfg['url']['timeout'] == 15000
+          assert env_cfg['url']['cache_ttl'] == 45
+          for k in ('IZKO_HOST', 'IZKO_PORT', 'IZKO_DEBUG', 'IZKO_TIMEOUT', 'IZKO_CACHE_TTL'):
+              os.environ.pop(k, None)
 
           parser = build_parser()
           args = parser.parse_args(['serve', '--host', '0.0.0.0', '--port', '8080', '--no-debug'])

@@ -51,10 +51,11 @@ The target page `https://www.izko.org.tr/Home/GuncelKur` populates gold and curr
 When `scrape()` is called:
 
 1. **Input Guard**: `is_safe_http_url()` verifies that the target URL uses `http` or `https` and includes a network host. Wait timeout is checked against the `[100, 60000]` millisecond window.
-2. **Browser Launch**: `sync_playwright()` starts a headless Chromium instance.
-3. **Navigation and Readiness Anchor**: `page.goto()` navigates to the target URL and `page.wait_for_selector()` blocks until the Cumhuriyet gold selector (`#ataLabel` by default) is attached to the DOM.
-4. **Element Iteration**: Each entry in the `label` map from [`config.json`](../src/izko_gold_price_api/config.json) is queried via `page.query_selector(f"#{id_}")`. If the element exists, its trimmed `inner_text()` is passed to `to_float()`. Missing selectors resolve to `None`.
-5. **Deterministic Teardown**: `browser.close()` executes inside a `finally` block so browser processes never leak on selector timeouts or navigation failures.
+2. **In-Memory TTL Cache Lookup**: If `use_cache=True` and `cache_ttl > 0` (default `30` seconds), `scrape()` checks the thread-safe `_response_cache` dictionary keyed by `(url, sorted_labels)`. A valid cache hit returns a deep copy of the cached payload immediately in memory without touching Playwright.
+3. **Persistent Browser Context Reuse**: On a cache miss, `_get_persistent_context()` starts `sync_playwright()`, headless Chromium, and a reusable `BrowserContext` once per worker thread and stores them in thread-local storage (`_browser_local`). Subsequent scrapes reuse the warm browser context and open a lightweight page via `context.new_page()`.
+4. **Navigation and Readiness Anchor**: `page.goto()` navigates to the target URL and `page.wait_for_selector()` blocks until the Cumhuriyet gold selector (`#ataLabel` by default) is attached to the DOM.
+5. **Element Iteration**: Each entry in the `label` map from [`config.json`](../src/izko_gold_price_api/config.json) is queried via `page.query_selector(f"#{id_}")`. If the element exists, its trimmed `inner_text()` is passed to `to_float()`. Missing selectors resolve to `None`.
+6. **Structured Error Classification and Page Teardown**: `page.close()` always runs inside a `finally` block while keeping the parent `BrowserContext` warm. Playwright `TimeoutError` exceptions map to HTTP `504` (`UPSTREAM_TIMEOUT`). Other Playwright or network exceptions reset the browser context via `close_browser()` and return HTTP `502` (`UPSTREAM_BAD_GATEWAY`).
 
 ```mermaid
 stateDiagram-v2

@@ -76,18 +76,31 @@ Error Response (`502 Bad Gateway`):
 
 ```json
 {
-  "error": "Upstream scrape failed"
+  "code": "UPSTREAM_BAD_GATEWAY",
+  "error": "Upstream navigation or network failure",
+  "url": "https://www.izko.org.tr/Home/GuncelKur"
+}
+```
+
+Timeout Response (`504 Gateway Timeout`):
+
+```json
+{
+  "code": "UPSTREAM_TIMEOUT",
+  "error": "Upstream selector or navigation timed out",
+  "url": "https://www.izko.org.tr/Home/GuncelKur"
 }
 ```
 
 ## HTTP Status Codes
 
-| Status Code | Origin | Condition |
-| :---: | :--- | :--- |
-| `200` | `/izko`, `/izko/bundle`, `scrape()` | Request succeeded and payload returned. |
-| `400` | `scrape()` | Target URL scheme is not `http`/`https` or `timeout` is outside `[100, 60000]` ms. |
-| `500` | `scrape()` | Target URL is empty or missing from configuration. |
-| `502` | `/izko/bundle`, `scrape()` | Upstream navigation failure, selector timeout, or Playwright runtime error. |
+| Status Code | Error Code | Origin | Condition |
+| :---: | :--- | :--- | :--- |
+| `200` | None | `/izko`, `/izko/bundle`, `scrape()` | Request succeeded and payload returned. |
+| `400` | `INVALID_URL`, `INVALID_TIMEOUT`, `INVALID_CACHE_TTL` | `scrape()` | Target URL scheme is not `http`/`https`, `timeout` is outside `[100, 60000]` ms, or `cache_ttl < 0`. |
+| `500` | `MISSING_URL` | `scrape()` | Target URL is empty or missing from configuration. |
+| `502` | `UPSTREAM_BAD_GATEWAY` | `/izko/bundle`, `scrape()` | Upstream navigation failure, connection refusal, or Playwright browser error. |
+| `504` | `UPSTREAM_TIMEOUT` | `/izko/bundle`, `scrape()` | Playwright `TimeoutError` while navigating or waiting for `#ataLabel`. |
 
 ## Python SDK Functions
 

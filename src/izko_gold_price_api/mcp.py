@@ -32,6 +32,10 @@ TOOLS: list[dict[str, Any]] = [
                     "maximum": MAX_TIMEOUT_MS,
                     "description": "Optional DOM selector wait timeout in milliseconds (default: 10000).",
                 },
+                "use_cache": {
+                    "type": "boolean",
+                    "description": "Whether to use the in-memory TTL response cache (default: true).",
+                },
             },
             "additionalProperties": False,
         },
@@ -123,7 +127,12 @@ def handle_mcp_request(request: dict[str, Any], cfg: dict[str, Any] | None = Non
 
         if tool_name == "get_izko_prices":
             try:
-                payload, status = scrape(timeout=arguments.get("timeout"), cfg=active_cfg)
+                use_cache = arguments.get("use_cache", True)
+                payload, status = scrape(
+                    timeout=arguments.get("timeout"),
+                    cfg=active_cfg,
+                    use_cache=bool(use_cache),
+                )
             except Exception:
                 return _jsonrpc_result(
                     req_id,

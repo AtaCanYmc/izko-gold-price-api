@@ -218,14 +218,15 @@ Varsayılan çalışma zamanı ayarları [`src/izko_gold_price_api/config.json`]
 
 ### Sunucu ve Kazıyıcı Parametreleri
 
-| Anahtar Yolu | Tip | Varsayılan | Zorunlu | Açıklama |
-| :--- | :--- | :--- | :---: | :--- |
-| `url.izko` | String | `https://www.izko.org.tr/Home/GuncelKur` | Evet | Playwright tarafından kazınan hedef URL. |
-| `url.timeout` | Integer | `10000` | Evet | Milisaniye cinsinden DOM seçici bekleme zaman aşımı. |
-| `api.host` | String | `127.0.0.1` | Evet | Flask dinleme adresi. Docker içinde `0.0.0.0` yapılmalıdır. |
-| `api.port` | Integer | `5000` | Evet | HTTP dinleme portu. |
-| `api.debug` | Boolean | `false` | Evet | Flask hata ayıklama yeniden yükleyicisi. Üretimde `false` tutulmalıdır. |
-| `api.rootMessage` | String | `Welcome to izko API` | Hayır | `/izko` uç noktasında döndürülen bilgilendirme metni. |
+| Anahtar Yolu | Ortam Değişkeni | Tip | Varsayılan | Zorunlu | Açıklama |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| `url.izko` | Yok | String | `https://www.izko.org.tr/Home/GuncelKur` | Evet | Playwright tarafından kazınan hedef URL. |
+| `url.timeout` | `IZKO_TIMEOUT` | Integer | `10000` | Evet | Milisaniye cinsinden DOM seçici bekleme zaman aşımı. |
+| `url.cache_ttl` | `IZKO_CACHE_TTL` | Integer | `30` | Hayır | Saniye cinsinden bellek içi yanıt önbellek süresi (`0` önbelleği kapatır). |
+| `api.host` | `IZKO_HOST` | String | `127.0.0.1` | Evet | Flask dinleme adresi. Docker içinde `0.0.0.0` yapılmalıdır. |
+| `api.port` | `IZKO_PORT` | Integer | `5000` | Evet | HTTP dinleme portu. |
+| `api.debug` | `IZKO_DEBUG` | Boolean | `false` | Evet | Flask hata ayıklama yeniden yükleyicisi. Üretimde `false` tutulmalıdır. |
+| `api.rootMessage` | Yok | String | `Welcome to izko API` | Hayır | `/izko` uç noktasında döndürülen bilgilendirme metni. |
 
 ### DOM Seçici Eşlemesi (`label`)
 
