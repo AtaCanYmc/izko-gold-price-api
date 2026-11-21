@@ -16,6 +16,7 @@ Flask REST API and Python package that scrapes live gold and currency rates from
 - [Installation from PyPI](#installation-from-pypi)
 - [Quick Start: Docker](#quick-start-docker)
 - [Manual Local Setup](#manual-local-setup)
+- [Command-Line Interface](#command-line-interface)
 - [Python Library Usage](#python-library-usage)
 - [API Endpoints](#api-endpoints)
 - [Configuration](#configuration)
@@ -92,6 +93,37 @@ make install
 # 3. Start the Flask server via CLI entry point
 make run
 ```
+
+## Command-Line Interface
+
+The `izko-gold-price-api` command and `python -m izko_gold_price_api` module entry point are implemented in [`cli.py`](src/izko_gold_price_api/cli.py) with three subcommands: `serve`, `scrape`, and `config`.
+
+```bash
+# Start Flask server on custom host and port with debug disabled
+izko-gold-price-api serve --host 0.0.0.0 --port 8080 --no-debug
+
+# Scrape live rates once and pretty-print JSON to stdout
+izko-gold-price-api scrape --pretty
+
+# Query a single price field for shell pipelines
+izko-gold-price-api scrape --field GramAltin
+
+# Print active configuration JSON
+izko-gold-price-api config
+```
+
+| Subcommand / Flag | Short | Type | Default | Description |
+| :--- | :---: | :--- | :--- | :--- |
+| `--version` | `-V` | Flag | `false` | Print package version and exit. |
+| `--config` | `-c` | Path | Bundled `config.json` | Override path to `config.json`. |
+| `serve --host` | None | String | `127.0.0.1` | Override Flask bind host. |
+| `serve --port` | None | Integer | `5000` | Override Flask listener port. |
+| `serve --debug` / `--no-debug` | None | Boolean | `true` | Enable or disable Flask debug mode. |
+| `scrape --field` | `-f` | String | None | Output a single field from `priceList`. |
+| `scrape --pretty` | None | Flag | `false` | Format JSON output with 2-space indentation. |
+| `scrape --url` | None | String | `url.izko` | Override target URL for a single run. |
+| `scrape --timeout` | None | Integer | `10000` | Override selector wait timeout in milliseconds. |
+| `config` | None | Subcommand | None | Print active configuration JSON and exit. |
 
 ## Python Library Usage
 
@@ -237,7 +269,9 @@ make publish
 └── src/
     └── izko_gold_price_api/
         ├── __init__.py
+        ├── __main__.py
         ├── app.py
+        ├── cli.py
         ├── config.json
         └── scrape.py
 ```

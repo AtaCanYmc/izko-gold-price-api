@@ -32,17 +32,22 @@ jobs:
         run: python -m build
 
       - name: Verify Python bytecode compilation
-        run: python -m py_compile src/izko_gold_price_api/__init__.py src/izko_gold_price_api/app.py src/izko_gold_price_api/scrape.py
+        run: python -m py_compile src/izko_gold_price_api/__init__.py src/izko_gold_price_api/__main__.py src/izko_gold_price_api/app.py src/izko_gold_price_api/cli.py src/izko_gold_price_api/scrape.py
 
       - name: Verify config.json schema and package imports
         run: |
           python -c "
-          from izko_gold_price_api import app, load_config, to_float
+          from izko_gold_price_api import app, build_parser, load_config, main, to_float
 
           cfg = load_config()
           assert 'url' in cfg and 'label' in cfg and 'api' in cfg
           assert to_float('23.450,75') == 23450.75
           assert to_float('14:30:00') == '14:30:00'
+
+          parser = build_parser()
+          args = parser.parse_args(['serve', '--host', '0.0.0.0', '--port', '8080', '--no-debug'])
+          assert args.command == 'serve' and args.host == '0.0.0.0' and args.port == 8080 and args.debug is False
+          assert main(['config']) == 0
 
           client = app.test_client()
           resp = client.get('/izko')

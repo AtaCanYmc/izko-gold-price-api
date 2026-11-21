@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from flask import Flask, Response, jsonify
 
 from .scrape import config, scrape

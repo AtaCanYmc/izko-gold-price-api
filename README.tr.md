@@ -16,6 +16,7 @@
 - [PyPI Üzerinden Kurulum](#pypi-üzerinden-kurulum)
 - [Hızlı Başlangıç: Docker](#hızlı-başlangıç-docker)
 - [Yerel Geliştirme Kurulumu](#yerel-geliştirme-kurulumu)
+- [Komut Satırı Arayüzü](#komut-satırı-arayüzü)
 - [Python Kütüphanesi Olarak Kullanım](#python-kütüphanesi-olarak-kullanım)
 - [API Uç Noktaları](#api-uç-noktaları)
 - [Yapılandırma](#yapılandırma)
@@ -92,6 +93,37 @@ make install
 # 3. Start the Flask server via CLI entry point
 make run
 ```
+
+## Komut Satırı Arayüzü
+
+`izko-gold-price-api` komutu ve `python -m izko_gold_price_api` modül girişi [`cli.py`](src/izko_gold_price_api/cli.py) içinde üç alt komutla (`serve`, `scrape`, `config`) tanımlanmıştır.
+
+```bash
+# Start Flask server on custom host and port with debug disabled
+izko-gold-price-api serve --host 0.0.0.0 --port 8080 --no-debug
+
+# Scrape live rates once and pretty-print JSON to stdout
+izko-gold-price-api scrape --pretty
+
+# Query a single price field for shell pipelines
+izko-gold-price-api scrape --field GramAltin
+
+# Print active configuration JSON
+izko-gold-price-api config
+```
+
+| Alt Komut / Bayrak | Kısa | Tip | Varsayılan | Açıklama |
+| :--- | :---: | :--- | :--- | :--- |
+| `--version` | `-V` | Bayrak | `false` | Paket sürümünü yazdırır ve çıkar. |
+| `--config` | `-c` | Yol | Paket içi `config.json` | Özel `config.json` dosya yolunu belirler. |
+| `serve --host` | Yok | String | `127.0.0.1` | Flask dinleme adresini ezer. |
+| `serve --port` | Yok | Integer | `5000` | Flask dinleme portunu ezer. |
+| `serve --debug` / `--no-debug` | Yok | Boolean | `true` | Flask hata ayıklama modunu açar veya kapatır. |
+| `scrape --field` | `-f` | String | Yok | `priceList` içinden tek bir alanı yazdırır. |
+| `scrape --pretty` | Yok | Bayrak | `false` | JSON çıktısını 2 boşluk girintiyle biçimlendirir. |
+| `scrape --url` | Yok | String | `url.izko` | Tek çalıştırma için hedef URL değerini ezer. |
+| `scrape --timeout` | Yok | Integer | `10000` | Seçici bekleme süresini milisaniye cinsinden ezer. |
+| `config` | Yok | Alt Komut | Yok | Etkin yapılandırma JSON içeriğini yazdırır ve çıkar. |
 
 ## Python Kütüphanesi Olarak Kullanım
 
@@ -237,7 +269,9 @@ make publish
 └── src/
     └── izko_gold_price_api/
         ├── __init__.py
+        ├── __main__.py
         ├── app.py
+        ├── cli.py
         ├── config.json
         └── scrape.py
 ```

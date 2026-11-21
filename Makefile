@@ -17,7 +17,7 @@ run: ## Flask REST API sunucusunu baslatir / Start the Flask REST API server
 	izko-gold-price-api
 
 verify: ## Sozdizimi, yapilandirma ve dokumantasyon baglantilarini dogrular / Verify syntax, config, and doc links
-	$(PYTHON) -m py_compile src/izko_gold_price_api/__init__.py src/izko_gold_price_api/app.py src/izko_gold_price_api/scrape.py
+	$(PYTHON) -m py_compile src/izko_gold_price_api/__init__.py src/izko_gold_price_api/__main__.py src/izko_gold_price_api/app.py src/izko_gold_price_api/cli.py src/izko_gold_price_api/scrape.py
 	$(PYTHON) -c 'import json, re, glob, os; \
 		cfg = json.load(open("src/izko_gold_price_api/config.json", encoding="utf-8")); \
 		assert "url" in cfg and "label" in cfg and "api" in cfg; \

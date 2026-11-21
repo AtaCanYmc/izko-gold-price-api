@@ -37,7 +37,7 @@ Repository = "https://github.com/AtaCanYmc/izko-gold-price-api"
 Issues = "https://github.com/AtaCanYmc/izko-gold-price-api/issues"
 
 [project.scripts]
-izko-gold-price-api = "izko_gold_price_api.app:main"
+izko-gold-price-api = "izko_gold_price_api.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
